@@ -55,7 +55,15 @@ function zech_op(logtable, exptable, n, ::typeof(inv), a)
 end
 
 function zech_op(logtable, exptable, n, ::typeof(^), a, N)
-    iszero(a) && throw(DivideError())
+    if iszero(a)
+        if n > 0
+            return zero(a)
+        elseif iszero(n)
+            return one(a)
+        else
+            throw(DivideError())
+        end
+    end
     exptable[mod(N * logtable[a], n)]
 end
 
